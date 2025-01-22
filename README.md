@@ -25,14 +25,12 @@ The **Machine Failure Prediction API** is designed to predict the likelihood of 
 ### **Installation**
 1. Clone this repository:
    ```bash
-   git clone <repository_url>
-   cd <repository_name>
+   git clone https://github.com/raviraj-441/Machine-Failure-Prediction-API.git
+   cd Machine-Failure-Prediction-API
    ```
-2. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. Ensure the trained model file (`best_rf_model.pkl`) is in the project directory.
+2. Install the required dependencies
+   
+4. Ensure the trained model file (`best_rf_model.pkl`) is in the project directory.
 
 ### **Running the API**
 Start the Flask server:
