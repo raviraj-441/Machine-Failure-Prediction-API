@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Failure Prediction</title>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            z-index: 10;
+            position: relative;
+            top: 15%;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-custom {
+            background-color: #17a2b8;
+            color: white;
+            border: none;
+        }
+
+        .btn-custom:hover {
+            background-color: #138496;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particle.js container -->
+    <div id="particles-js"></div>
+
+    <!-- Form container -->
+    <div class="container">
+        <h1 class="text-center">Machine Failure Prediction</h1>
+        <form method="POST" action="/predict">
+            <div class="row">
+                <!-- Existing inputs -->
+                <div class="col-md-6">
+                    <label for="air_temp" class="form-label">Air Temperature [K]</label>
+                    <input type="number" step="any" class="form-control" id="air_temp" name="air_temp" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="process_temp" class="form-label">Process Temperature [K]</label>
+                    <input type="number" step="any" class="form-control" id="process_temp" name="process_temp" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="rot_speed" class="form-label">Rotational Speed [rpm]</label>
+                    <input type="number" class="form-control" id="rot_speed" name="rot_speed" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="torque" class="form-label">Torque [Nm]</label>
+                    <input type="number" step="any" class="form-control" id="torque" name="torque" required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="tool_wear" class="form-label">Tool Wear [min]</label>
+                    <input type="number" class="form-control" id="tool_wear" name="tool_wear" required>
+                </div>
+                <div class="col-md-6">
+                    <!-- Checkbox for binary fields -->
+                    <div class="form-check mt-4">
+                        <input class="form-check-input" type="checkbox" id="twf" name="twf">
+                        <label class="form-check-label" for="twf">TWF</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="hdf" name="hdf">
+                        <label class="form-check-label" for="hdf">HDF</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="pwf" name="pwf">
+                        <label class="form-check-label" for="pwf">PWF</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="osf" name="osf">
+                        <label class="form-check-label" for="osf">OSF</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="rnf" name="rnf">
+                        <label class="form-check-label" for="rnf">RNF</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="type_l" name="type_l">
+                        <label class="form-check-label" for="type_l">Type L</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="type_m" name="type_m">
+                        <label class="form-check-label" for="type_m">Type M</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <button type="submit" class="btn btn-custom w-100">Predict</button>
+            </div>
+        </form>
+
+
+        {% if prediction %}
+        <div class="alert alert-success mt-4">
+            <strong>Prediction:</strong> {{ prediction }}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Particle.js configuration -->
+    <script>
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 100, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#ffffff" },
+                "shape": {
+                    "type": "circle",
+                    "stroke": { "width": 0, "color": "#000000" },
+                    "polygon": { "nb_sides": 5 }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#ffffff",
+                    "opacity": 0.4,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": { "enable": true, "mode": "repulse" },
+                    "onclick": { "enable": true, "mode": "push" },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+                    "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+                    "repulse": { "distance": 200, "duration": 0.4 },
+                    "push": { "particles_nb": 4 },
+                    "remove": { "particles_nb": 2 }
+                }
+            },
+            "retina_detect": true
+        });
+    </script>
+
+</body>
+
+</html>
